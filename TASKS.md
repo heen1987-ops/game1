@@ -37,11 +37,11 @@ Desktop\travel-platform(별도 실험 프로젝트, GitHub heen1987-ops/pppp)에
 - [!] git 원격 저장소 연결 — 개인 여행 데이터(prisma/dev.db)는 .gitignore로 제외했지만,
       실제 remote 연결/push 여부는 사용자 확인 후 진행 (Phase 3.1 참고)
 
-### Phase 3.1 — git/원격 저장소 (진행 중 — 사용자가 새 저장소 생성 요청받음)
+### Phase 3.1 — git/원격 저장소 (완료)
 - [x] 사용자 확인: heen1987-ops/pppp(Desktop 실험용)와 별도로, trip-platform용 **새 GitHub
       저장소**를 만들기로 결정 (2026-07-24)
-- [!] 사용자가 GitHub에서 새 저장소(제안: `trip-platform`, private 권장)를 만들고 URL을
-      알려주는 것을 기다리는 중. URL을 받으면 git init + remote add + push 진행
+- [x] 저장소 연결: **https://github.com/heen1987-ops/game1** (main 브랜치), 초기 커밋 push
+      완료 (2026-07-24). prisma/dev.db, .env, scripts/queue.db는 .gitignore로 제외 확인됨.
 
 ### Phase 3.2 — 배포 (Phase 1의 AdSense 신청 전제조건)
 - **배포 타깃 도메인: `travel.hs-lab.site` (서브도메인)** — hs-lab.site 루트는 별도 앱
@@ -78,5 +78,11 @@ Desktop\travel-platform(별도 실험 프로젝트, GitHub heen1987-ops/pppp)에
   4. docs/DEVLOG.md 맨 위에 이번 사이클 요약 2~3줄 추가
 
 **공통**
-- `[!]` 항목(계정 가입, 결제, git 원격 연결 등 사용자 액션/결정 필요)은 절대 건드리지 않는다
-- **git commit/push는 하지 않는다** — Phase 3.1의 사용자 결정 전까지 로컬 파일 변경만 수행
+- `[!]` 항목(계정 가입, 결제, 배포/DNS 설정 등 사용자 액션/결정 필요)은 절대 건드리지 않는다
+- 원격 저장소 연결 완료: https://github.com/heen1987-ops/game1 (main 브랜치). 매 사이클 아래
+  방식으로 커밋 + push까지 자동 진행한다:
+  `git add -A && git -c user.name="heen1987-ops" -c user.email="heen1987@gmail.com" commit -m "..." && git push origin main`
+  (git config 자체는 절대 건드리지 않는다 — 매번 -c 플래그로만 identity 지정)
+- **prisma/dev.db, .env, scripts/queue.db는 이미 .gitignore로 제외되어 있다. 이 규칙을 절대
+  건드리지 말고(.gitignore에서 빼지 말고), 실수로라도 개인 여행 데이터나 API 키가 커밋되지
+  않도록 커밋 전 `git status`로 스테이징 내역을 확인한다.**

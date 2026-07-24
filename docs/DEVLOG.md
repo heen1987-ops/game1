@@ -4,6 +4,12 @@
 docs/ISSUES.md의 "처리 완료" 섹션을 먼저 확인한다.
 
 ---
+### 2026-07-24 (git 저장소 연결)
+- https://github.com/heen1987-ops/game1 (main 브랜치)에 연결, 초기 커밋 push 완료
+- 스테이징 전 확인: prisma/dev.db, .env, scripts/queue.db 모두 .gitignore로 정상 제외됨
+- 자동 실행 규칙에 git commit+push 단계 추가 (매 사이클 민감 파일 스테이징 여부 확인 포함)
+
+---
 ### 2026-07-24 (수동 실행, PWA + AdSense 자리표시자 추가)
 - "앱"은 PWA로 결정 (Capacitor/React Native 아님) → public/manifest.json, public/sw.js,
   아이콘(icon-192/512.png) 추가, layout.tsx에서 manifest 연결 + RegisterSW로 서비스워커 등록
