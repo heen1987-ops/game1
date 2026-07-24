@@ -1,0 +1,19 @@
+{
+  "entries": [
+    { "key": "home.title", "value": "Circuit Shift" },
+    { "key": "home.play_daily", "value": "Today's Puzzle" },
+    { "key": "home.play_quick", "value": "Quick Play" },
+    { "key": "home.play_infinite", "value": "Infinite Circuit" },
+    { "key": "game.get_ready", "value": "Get Ready" },
+    { "key": "result.success_title", "value": "Circuit Complete!" },
+    { "key": "result.fail_timeout", "value": "Out of Time" },
+    { "key": "result.fail_disconnected", "value": "Circuit Broken" },
+    { "key": "result.next", "value": "Next" },
+    { "key": "result.retry", "value": "Retry" },
+    { "key": "result.watch_ad_double_coins", "value": "Watch Ad: Double Coins" },
+    { "key": "result.watch_ad_revive", "value": "Watch Ad: One More Chance" },
+    { "key": "settings.title", "value": "Settings" },
+    { "key": "settings.music", "value": "Music" },
+    { "key": "settings.sound", "value": "Sound" }
+  ]
+}

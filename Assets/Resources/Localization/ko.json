@@ -1,0 +1,19 @@
+{
+  "entries": [
+    { "key": "home.title", "value": "서킷 시프트" },
+    { "key": "home.play_daily", "value": "오늘의 퍼즐" },
+    { "key": "home.play_quick", "value": "빠른 플레이" },
+    { "key": "home.play_infinite", "value": "무한 회로" },
+    { "key": "game.get_ready", "value": "준비하세요" },
+    { "key": "result.success_title", "value": "회로 연결 완료!" },
+    { "key": "result.fail_timeout", "value": "시간 초과" },
+    { "key": "result.fail_disconnected", "value": "회로 단절" },
+    { "key": "result.next", "value": "다음" },
+    { "key": "result.retry", "value": "다시하기" },
+    { "key": "result.watch_ad_double_coins", "value": "광고 보고 코인 2배" },
+    { "key": "result.watch_ad_revive", "value": "광고 보고 한 번 더" },
+    { "key": "settings.title", "value": "설정" },
+    { "key": "settings.music", "value": "음악" },
+    { "key": "settings.sound", "value": "효과음" }
+  ]
+}
