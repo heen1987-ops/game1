@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ── 여행 프로젝트 ──────────────────────────────────────────────
+
+model Trip {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   @default("leisure") // leisure | business | family | scouting
+  startDate   DateTime
+  endDate     DateTime
+  country     String?
+  city        String?
+  status      String   @default("planning") // planning | confirmed | ongoing | completed | cancelled
+  budget      Float?
+  currency    String   @default("KRW")
+  description String?
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tripPlaces     TripPlace[]
+  itineraries    Itinerary[]
+  accommodations Accommodation[]
+  reservations   Reservation[]
+  expenses       Expense[]
+  checklists     ChecklistItem[]
+  travelLogs     TravelLog[]
+}
+
+// ── 공통 장소 DB ───────────────────────────────────────────────
+
+model Place {
+  id                String   @id @default(cuid())
+  name              String
+  country           String?
+  city              String?
+  category          String // landmark | restaurant | cafe | shopping | hotel | airport | station | convenience | hospital | other
+  address           String?
+  lat               Float?
+  lng               Float?
+  openingHours      String?
+  estimatedDuration Int? // minutes
+  websiteUrl        String?
+  mapQuery          String?
+  description       String?
+  personalRating    Int? // 1-5
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  tripPlaces      TripPlace[]
+  itineraryItems  ItineraryItem[]
+  accommodations  Accommodation[]
+  guideContents   GuideContent[]
+  travelLogs      TravelLog[]
+}
+
+// 여행 ↔ 장소 연결 테이블 (같은 장소를 여러 여행에서 재사용)
+model TripPlace {
+  id          String   @id @default(cuid())
+  tripId      String
+  placeId     String
+  priority    Int      @default(0)
+  visitStatus String   @default("candidate") // candidate | planned | visited | skipped
+  plannedDate DateTime?
+  memo        String?
+  createdAt   DateTime @default(now())
+
+  trip  Trip  @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, placeId])
+}
+
+// ── 일정 ──────────────────────────────────────────────────────
+
+model Itinerary {
+  id          String   @id @default(cuid())
+  tripId      String
+  date        DateTime
+  title       String
+  description String?
+
+  trip  Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items ItineraryItem[]
+
+  @@unique([tripId, date])
+}
+
+model ItineraryItem {
+  id                  String   @id @default(cuid())
+  itineraryId         String
+  placeId             String?
+  customPlaceName     String? // placeId 없이 임시 텍스트로 넣을 때
+  startTime           String? // "09:00" 형식 (여행지 로컬시간 기준 문자열)
+  endTime             String?
+  sequence            Int      @default(0)
+  transportType       String? // walk | subway | train | bus | car | flight
+  transportDetail     String? // "미도스지선 M20→M16 신오사카 방면" 같은 상세
+  travelDuration       Int? // 이전 항목에서 이동 소요(분)
+  reservationRequired Boolean  @default(false)
+  status              String   @default("planned") // planned | confirmed | done | skipped
+  isAnchor            Boolean  @default(false) // 시간 고정, 자동 재배치 제외
+  memo                String?
+
+  itinerary Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  place     Place?    @relation(fields: [placeId], references: [id])
+}
+
+// ── 숙소 ──────────────────────────────────────────────────────
+
+model Accommodation {
+  id                String   @id @default(cuid())
+  tripId            String
+  placeId           String?
+  name              String
+  checkIn           DateTime
+  checkOut          DateTime
+  reservationNumber String?
+  price             Float?
+  currency          String   @default("KRW")
+  status            String   @default("confirmed") // confirmed | pending | cancelled
+
+  trip  Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  place Place? @relation(fields: [placeId], references: [id])
+}
+
+// ── 예약 ──────────────────────────────────────────────────────
+
+model Reservation {
+  id                String    @id @default(cuid())
+  tripId            String
+  type              String // flight | accommodation | train | bus | rentalcar | activity | restaurant | show | insurance
+  title             String
+  provider          String?
+  reservationNumber String?
+  reservationDate   DateTime?
+  useDate           DateTime?
+  amount            Float?
+  currency          String    @default("KRW")
+  cancelDeadline    DateTime?
+  status            String    @default("confirmed") // confirmed | pending | cancelled
+  attachmentUrl     String?
+  memo              String?
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+// ── 비용 ──────────────────────────────────────────────────────
+
+model Expense {
+  id            String   @id @default(cuid())
+  tripId        String
+  date          DateTime
+  category      String // transport | lodging | food | activity | shopping | telecom | insurance | other
+  description   String?
+  amount        Float
+  currency      String   @default("KRW")
+  exchangeRate  Float?
+  paymentMethod String? // cash | card | transfer
+  sharedType    String   @default("personal") // personal | shared
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+// ── 준비물·체크리스트 ──────────────────────────────────────────
+
+model ChecklistItem {
+  id          String    @id @default(cuid())
+  tripId      String
+  category    String // document | clothing | electronics | medicine | toiletries | reservation | currency | telecom | local
+  itemName    String
+  isCompleted Boolean   @default(false)
+  priority    Int       @default(0)
+  dueDate     DateTime?
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+// ── 관광가이드 DB ─────────────────────────────────────────────
+
+model GuideContent {
+  id          String   @id @default(cuid())
+  placeId     String
+  contentType String // overview | tip | warning | transport | food | shopping
+  title       String
+  content     String
+  sourceUrl   String?
+  updatedAt   DateTime @updatedAt
+
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+}
+
+// ── 여행 기록 ──────────────────────────────────────────────────
+
+model TravelLog {
+  id             String    @id @default(cuid())
+  tripId         String
+  placeId        String?
+  visitedAt      DateTime?
+  actualDuration Int? // minutes
+  rating         Int? // 1-5
+  review         String?
+  revisit        Boolean?
+  photoUrls      String? // JSON 배열 문자열
+
+  trip  Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  place Place? @relation(fields: [placeId], references: [id])
+}
