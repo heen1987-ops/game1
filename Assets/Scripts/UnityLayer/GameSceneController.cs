@@ -18,6 +18,7 @@ namespace CircuitShift.UnityLayer
 
         private string modeAnalyticsName;
         private string levelId;
+        private int weeklyStageIndex;
 
         private void Start()
         {
@@ -42,6 +43,17 @@ namespace CircuitShift.UnityLayer
                     seed = GameSession.PendingSeed ?? UnityEngine.Random.Range(int.MinValue, int.MaxValue);
                     modeAnalyticsName = "infinite";
                     levelId = GameSession.PendingInfiniteLevel.ToString();
+                    break;
+
+                case GameMode.Weekly:
+                    // Derived fresh from saved progress every time (not GameSession) so a
+                    // fail-and-retry naturally replays the same still-incomplete stage.
+                    weeklyStageIndex = WeeklyChallengeManager.NextStage(DateTime.UtcNow) ?? 1;
+                    var (weeklySettings, weeklySeed) = DifficultyController.WeeklyChallengeStage(DateTime.UtcNow, weeklyStageIndex);
+                    settings = weeklySettings;
+                    seed = weeklySeed;
+                    modeAnalyticsName = "weekly";
+                    levelId = $"{DifficultyController.WeeklyWeekId(DateTime.UtcNow)}-stage{weeklyStageIndex}";
                     break;
 
                 default:
@@ -86,6 +98,16 @@ namespace CircuitShift.UnityLayer
             else if (GameSession.LastMode == GameMode.Infinite)
             {
                 SaveManager.Data.bestInfiniteLevel = Mathf.Max(SaveManager.Data.bestInfiniteLevel, GameSession.PendingInfiniteLevel + 1);
+            }
+            else if (GameSession.LastMode == GameMode.Weekly)
+            {
+                bool advanced = WeeklyChallengeManager.RecordStageComplete(DateTime.UtcNow, weeklyStageIndex);
+                if (advanced && weeklyStageIndex == WeeklyChallengeManager.StageCount)
+                {
+                    const int weeklyCompletionBonus = 200; // placeholder economy, same spirit as the per-star coin formula above
+                    SaveManager.Data.coins += weeklyCompletionBonus;
+                    coinsEarned += weeklyCompletionBonus;
+                }
             }
 
             SaveManager.Save();

@@ -23,6 +23,12 @@ namespace CircuitShift.Modules
         public int bestInfiniteLevel;
         public int totalLevelsCompleted;
         public bool tutorialCompleted;
+
+        /// <summary>ISO week (see DifficultyController.WeeklyWeekId) that weeklyChallengeStage counts progress for.</summary>
+        public string weeklyChallengeWeekId = "";
+
+        /// <summary>Stages completed (0-7) within weeklyChallengeWeekId.</summary>
+        public int weeklyChallengeStage;
     }
 
     /// <summary>

@@ -4,7 +4,8 @@ namespace CircuitShift.UnityLayer
     {
         Daily,
         Quick,
-        Infinite
+        Infinite,
+        Weekly
     }
 
     /// <summary>
@@ -21,7 +22,7 @@ namespace CircuitShift.UnityLayer
         /// <summary>
         /// Set by GameSceneController after generating a board so "retry" reproduces
         /// the same puzzle instead of a fresh random one. Cleared before "next"/a new
-        /// mode selection. Daily mode ignores this - it's already date-seeded.
+        /// mode selection. Daily and Weekly ignore this - they're already date/week-seeded.
         /// </summary>
         public static int? PendingSeed;
 

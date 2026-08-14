@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace CircuitShift.Core
 {
@@ -55,6 +56,46 @@ namespace CircuitShift.Core
                 DistractorDensity = 0.6f
             };
             int seed = utcDate.Year * 10000 + utcDate.Month * 100 + utcDate.Day;
+            return (settings, seed);
+        }
+
+        public const int WeeklyChallengeStageCount = 7;
+
+        /// <summary>ISO-8601 year+week identifier (e.g. "2026-W07"); stable across the whole week regardless of which day it's read on.</summary>
+        public static string WeeklyWeekId(DateTime utcDate) =>
+            $"{ISOWeek.GetYear(utcDate)}-W{ISOWeek.GetWeekOfYear(utcDate):D2}";
+
+        /// <summary>
+        /// Same 7-stage puzzle set for every player on a given ISO week (design doc
+        /// section 3: "주간 챌린지: 7단계 연속 퍼즐"). Difficulty ramps from just above
+        /// Quick Play (stage 1) to just below Infinite's late-game pace (stage 7).
+        /// </summary>
+        public static (DifficultySettings settings, int seed) WeeklyChallengeStage(DateTime utcDate, int stageIndex)
+        {
+            stageIndex = Math.Clamp(stageIndex, 1, WeeklyChallengeStageCount);
+
+            int size = 5 + Math.Min(2, (stageIndex - 1) / 3); // 5x5 for stages 1-3, 6x6 for 4-6, 7x7 for 7
+            float timeLimit = Math.Max(60f, 100f - (stageIndex - 1) * 6f);
+            float pulseSpeed = Math.Min(1.8f, 1.1f + (stageIndex - 1) * 0.1f);
+            float distractorDensity = Math.Min(0.7f, 0.5f + (stageIndex - 1) * 0.03f);
+
+            var settings = new DifficultySettings
+            {
+                BoardWidth = size,
+                BoardHeight = size,
+                TimeLimitSeconds = timeLimit,
+                PulseStartDelaySeconds = 3f,
+                PulseSpeedTilesPerSecond = pulseSpeed,
+                MinPathLength = Math.Min(size * size - 2, 6 + stageIndex),
+                MaxPathLength = Math.Min(size * size - 1, 10 + stageIndex),
+                DistractorDensity = distractorDensity
+            };
+
+            // isoWeek <= 53, stageIndex <= 7: distinct, collision-free seeds per (week, stage).
+            int isoYear = ISOWeek.GetYear(utcDate);
+            int isoWeek = ISOWeek.GetWeekOfYear(utcDate);
+            int seed = isoYear * 1000 + isoWeek * 10 + stageIndex;
+
             return (settings, seed);
         }
 

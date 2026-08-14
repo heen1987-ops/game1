@@ -1,3 +1,4 @@
+using System;
 using CircuitShift.Modules;
 using TMPro;
 using UnityEngine;
@@ -5,12 +6,13 @@ using UnityEngine.UI;
 
 namespace CircuitShift.UnityLayer
 {
-    /// <summary>Wires the three MVP mode buttons (design doc section 3) plus settings entry.</summary>
+    /// <summary>Wires the four mode buttons (design doc section 3, plus the weekly challenge added post-MVP) and settings/collection entry points.</summary>
     public class HomeController : MonoBehaviour
     {
         [SerializeField] private Button dailyButton;
         [SerializeField] private Button quickButton;
         [SerializeField] private Button infiniteButton;
+        [SerializeField] private Button weeklyButton;
         [SerializeField] private Button settingsButton;
         [SerializeField] private Button collectionButton;
 
@@ -18,6 +20,8 @@ namespace CircuitShift.UnityLayer
         [SerializeField] private TMP_Text dailyLabel;
         [SerializeField] private TMP_Text quickLabel;
         [SerializeField] private TMP_Text infiniteLabel;
+        [SerializeField] private TMP_Text weeklyLabel;
+        [SerializeField] private TMP_Text weeklyProgressText;
         [SerializeField] private TMP_Text streakText;
         [SerializeField] private TMP_Text coinsText;
 
@@ -27,12 +31,18 @@ namespace CircuitShift.UnityLayer
             dailyLabel.text = LocalizationManager.Get("home.play_daily");
             quickLabel.text = LocalizationManager.Get("home.play_quick");
             infiniteLabel.text = LocalizationManager.Get("home.play_infinite");
+            weeklyLabel.text = LocalizationManager.Get("home.play_weekly");
             streakText.text = SaveManager.Data.dailyStreak.ToString();
             coinsText.text = SaveManager.Data.coins.ToString();
+
+            int weeklyCompleted = WeeklyChallengeManager.CompletedStages(DateTime.UtcNow);
+            weeklyProgressText.text = $"{weeklyCompleted}/{WeeklyChallengeManager.StageCount}";
+            weeklyButton.interactable = weeklyCompleted < WeeklyChallengeManager.StageCount;
 
             dailyButton.onClick.AddListener(PlayDaily);
             quickButton.onClick.AddListener(PlayQuick);
             infiniteButton.onClick.AddListener(PlayInfinite);
+            weeklyButton.onClick.AddListener(PlayWeekly);
             settingsButton.onClick.AddListener(OpenSettings);
             collectionButton.onClick.AddListener(OpenCollection);
         }
@@ -55,6 +65,15 @@ namespace CircuitShift.UnityLayer
         {
             GameSession.PendingMode = GameMode.Infinite;
             GameSession.PendingInfiniteLevel = Mathf.Max(1, SaveManager.Data.bestInfiniteLevel);
+            GameSession.PendingSeed = null;
+            SceneFlowManager.Load(SceneFlowManager.Scenes.Game);
+        }
+
+        private void PlayWeekly()
+        {
+            if (WeeklyChallengeManager.NextStage(DateTime.UtcNow) == null) return; // already cleared this week
+
+            GameSession.PendingMode = GameMode.Weekly;
             GameSession.PendingSeed = null;
             SceneFlowManager.Load(SceneFlowManager.Scenes.Game);
         }

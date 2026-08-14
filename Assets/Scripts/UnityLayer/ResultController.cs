@@ -1,3 +1,4 @@
+using System;
 using CircuitShift.Modules;
 using CircuitShift.Modules.Ads;
 using TMPro;
@@ -94,6 +95,13 @@ namespace CircuitShift.UnityLayer
         {
             if (GameSession.LastMode == GameMode.Infinite) GameSession.PendingInfiniteLevel++;
             GameSession.PendingSeed = null; // force a fresh puzzle
+
+            if (GameSession.LastMode == GameMode.Weekly && WeeklyChallengeManager.NextStage(DateTime.UtcNow) == null)
+            {
+                SceneFlowManager.Load(SceneFlowManager.Scenes.Home); // just cleared stage 7 - nothing left to play this week
+                return;
+            }
+
             SceneFlowManager.Load(SceneFlowManager.Scenes.Game);
         }
 

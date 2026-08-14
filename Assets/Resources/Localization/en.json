@@ -4,6 +4,7 @@
     { "key": "home.play_daily", "value": "Today's Puzzle" },
     { "key": "home.play_quick", "value": "Quick Play" },
     { "key": "home.play_infinite", "value": "Infinite Circuit" },
+    { "key": "home.play_weekly", "value": "Weekly Challenge" },
     { "key": "game.get_ready", "value": "Get Ready" },
     { "key": "result.success_title", "value": "Circuit Complete!" },
     { "key": "result.fail_timeout", "value": "Out of Time" },

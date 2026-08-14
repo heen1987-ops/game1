@@ -4,6 +4,7 @@
     { "key": "home.play_daily", "value": "오늘의 퍼즐" },
     { "key": "home.play_quick", "value": "빠른 플레이" },
     { "key": "home.play_infinite", "value": "무한 회로" },
+    { "key": "home.play_weekly", "value": "주간 챌린지" },
     { "key": "game.get_ready", "value": "준비하세요" },
     { "key": "result.success_title", "value": "회로 연결 완료!" },
     { "key": "result.fail_timeout", "value": "시간 초과" },
