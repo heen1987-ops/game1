@@ -15,6 +15,7 @@
     { "key": "settings.title", "value": "설정" },
     { "key": "settings.music", "value": "음악" },
     { "key": "settings.sound", "value": "효과음" },
+    { "key": "settings.language", "value": "언어" },
     { "key": "collection.title", "value": "컬렉션" },
     { "key": "theme.default", "value": "클래식" },
     { "key": "theme.neon", "value": "네온" },

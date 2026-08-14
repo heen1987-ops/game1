@@ -10,7 +10,8 @@ namespace CircuitShift.Modules
     {
         private const string MusicVolumeKey = "audio.musicVolume";
         private const string SfxVolumeKey = "audio.sfxVolume";
-        private const string MutedKey = "audio.muted";
+        private const string MusicMutedKey = "audio.musicMuted";
+        private const string SfxMutedKey = "audio.sfxMuted";
 
         public static AudioManager Instance { get; private set; }
 
@@ -19,7 +20,8 @@ namespace CircuitShift.Modules
 
         public float MusicVolume { get; private set; } = 1f;
         public float SfxVolume { get; private set; } = 1f;
-        public bool Muted { get; private set; }
+        public bool MusicMuted { get; private set; }
+        public bool SfxMuted { get; private set; }
 
         private void Awake()
         {
@@ -38,8 +40,9 @@ namespace CircuitShift.Modules
 
             MusicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, 1f);
             SfxVolume = PlayerPrefs.GetFloat(SfxVolumeKey, 1f);
-            Muted = PlayerPrefs.GetInt(MutedKey, 0) == 1;
-            ApplyVolumes();
+            MusicMuted = PlayerPrefs.GetInt(MusicMutedKey, 0) == 1;
+            SfxMuted = PlayerPrefs.GetInt(SfxMutedKey, 0) == 1;
+            ApplyMusicVolume();
         }
 
         public void PlayMusic(AudioClip clip)
@@ -53,7 +56,7 @@ namespace CircuitShift.Modules
 
         public void PlaySfx(AudioClip clip, float volumeScale = 1f)
         {
-            if (clip == null || Muted) return;
+            if (clip == null || SfxMuted) return;
             sfxSource.PlayOneShot(clip, SfxVolume * volumeScale);
         }
 
@@ -61,7 +64,7 @@ namespace CircuitShift.Modules
         {
             MusicVolume = Mathf.Clamp01(value);
             PlayerPrefs.SetFloat(MusicVolumeKey, MusicVolume);
-            ApplyVolumes();
+            ApplyMusicVolume();
         }
 
         public void SetSfxVolume(float value)
@@ -70,16 +73,22 @@ namespace CircuitShift.Modules
             PlayerPrefs.SetFloat(SfxVolumeKey, SfxVolume);
         }
 
-        public void SetMuted(bool muted)
+        public void SetMusicMuted(bool muted)
         {
-            Muted = muted;
-            PlayerPrefs.SetInt(MutedKey, muted ? 1 : 0);
-            ApplyVolumes();
+            MusicMuted = muted;
+            PlayerPrefs.SetInt(MusicMutedKey, muted ? 1 : 0);
+            ApplyMusicVolume();
         }
 
-        private void ApplyVolumes()
+        public void SetSfxMuted(bool muted)
         {
-            musicSource.volume = Muted ? 0f : MusicVolume;
+            SfxMuted = muted;
+            PlayerPrefs.SetInt(SfxMutedKey, muted ? 1 : 0);
+        }
+
+        private void ApplyMusicVolume()
+        {
+            musicSource.volume = MusicMuted ? 0f : MusicVolume;
         }
     }
 }

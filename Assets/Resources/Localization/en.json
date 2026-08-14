@@ -15,6 +15,7 @@
     { "key": "settings.title", "value": "Settings" },
     { "key": "settings.music", "value": "Music" },
     { "key": "settings.sound", "value": "Sound" },
+    { "key": "settings.language", "value": "Language" },
     { "key": "collection.title", "value": "Collection" },
     { "key": "theme.default", "value": "Classic" },
     { "key": "theme.neon", "value": "Neon" },

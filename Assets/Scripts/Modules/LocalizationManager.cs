@@ -28,6 +28,9 @@ namespace CircuitShift.Modules
         private const string PrefsKey = "localization.language";
         private const string FallbackLanguage = "en";
 
+        /// <summary>MVP language support (design doc: "한국어·영어 지원"). Add new Resources/Localization/{code}.json files to extend.</summary>
+        public static readonly string[] SupportedLanguages = { "ko", "en" };
+
         private static readonly Dictionary<string, string> table = new Dictionary<string, string>();
         private static bool initialized;
 
