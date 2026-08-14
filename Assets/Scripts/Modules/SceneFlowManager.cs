@@ -14,6 +14,7 @@ namespace CircuitShift.Modules
             public const string Result = "Result";
             public const string Collection = "Collection";
             public const string Settings = "Settings";
+            public const string Tutorial = "Tutorial";
         }
 
         public static event Action<string> SceneLoadRequested;

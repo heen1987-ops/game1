@@ -14,6 +14,14 @@
     { "key": "result.watch_ad_revive", "value": "Watch Ad: One More Chance" },
     { "key": "settings.title", "value": "Settings" },
     { "key": "settings.music", "value": "Music" },
-    { "key": "settings.sound", "value": "Sound" }
+    { "key": "settings.sound", "value": "Sound" },
+    { "key": "collection.title", "value": "Collection" },
+    { "key": "theme.default", "value": "Classic" },
+    { "key": "theme.neon", "value": "Neon" },
+    { "key": "theme.sunset", "value": "Sunset" },
+    { "key": "theme.mono", "value": "Mono" },
+    { "key": "tutorial.step1_rotate", "value": "Tap the glowing tile to rotate it" },
+    { "key": "tutorial.step2_watch", "value": "Watch the pulse travel through" },
+    { "key": "tutorial.step3_complete", "value": "You're ready!" }
   ]
 }

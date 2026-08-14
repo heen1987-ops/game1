@@ -45,6 +45,8 @@ namespace CircuitShift.UnityLayer
             Refresh();
         }
 
+        public void SetTint(Color color) => spriteRenderer.color = color;
+
         /// <summary>Re-reads Data (type + rotation) and updates the sprite/transform to match.</summary>
         public void Refresh()
         {

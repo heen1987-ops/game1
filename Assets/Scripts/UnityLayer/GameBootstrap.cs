@@ -40,7 +40,9 @@ namespace CircuitShift.UnityLayer
                 InterstitialAdManager.Preload(AdUnitIds.InterstitialTestAndroid);
             }
 
-            SceneFlowManager.Load(SceneFlowManager.Scenes.Home);
+            SceneFlowManager.Load(SaveManager.Data.tutorialCompleted
+                ? SceneFlowManager.Scenes.Home
+                : SceneFlowManager.Scenes.Tutorial);
         }
     }
 }

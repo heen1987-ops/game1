@@ -14,6 +14,14 @@
     { "key": "result.watch_ad_revive", "value": "광고 보고 한 번 더" },
     { "key": "settings.title", "value": "설정" },
     { "key": "settings.music", "value": "음악" },
-    { "key": "settings.sound", "value": "효과음" }
+    { "key": "settings.sound", "value": "효과음" },
+    { "key": "collection.title", "value": "컬렉션" },
+    { "key": "theme.default", "value": "클래식" },
+    { "key": "theme.neon", "value": "네온" },
+    { "key": "theme.sunset", "value": "선셋" },
+    { "key": "theme.mono", "value": "모노" },
+    { "key": "tutorial.step1_rotate", "value": "빛나는 타일을 눌러 회전시켜보세요" },
+    { "key": "tutorial.step2_watch", "value": "펄스가 회로를 따라 이동합니다" },
+    { "key": "tutorial.step3_complete", "value": "준비 완료!" }
   ]
 }

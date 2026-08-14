@@ -11,6 +11,10 @@ namespace CircuitShift.Modules
     {
         public int coins;
         public List<string> unlockedThemeIds = new List<string>();
+
+        /// <summary>Empty means "use ThemeCatalog.DefaultThemeId".</summary>
+        public string activeThemeId = "";
+
         public int dailyStreak;
 
         /// <summary>yyyyMMdd of the last daily puzzle the player completed, empty if never.</summary>
@@ -18,6 +22,7 @@ namespace CircuitShift.Modules
 
         public int bestInfiniteLevel;
         public int totalLevelsCompleted;
+        public bool tutorialCompleted;
     }
 
     /// <summary>

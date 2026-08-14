@@ -8,6 +8,26 @@ namespace CircuitShift.Core
     /// </summary>
     public static class DifficultyController
     {
+        /// <summary>Fixed seed so the tutorial board is identical (and known-simple) for every player.</summary>
+        public const int TutorialSeed = 1;
+
+        /// <summary>
+        /// A 3-wide, 1-tall board with no distractors: start, one rotatable tile, goal.
+        /// Matches design doc section 4's 3-step onboarding (rotate the highlighted tile,
+        /// watch the circuit complete, watch the pulse succeed) in under 30 seconds.
+        /// </summary>
+        public static DifficultySettings TutorialSettings() => new DifficultySettings
+        {
+            BoardWidth = 3,
+            BoardHeight = 1,
+            TimeLimitSeconds = 60f,
+            PulseStartDelaySeconds = 2f,
+            PulseSpeedTilesPerSecond = 0.6f,
+            MinPathLength = 3,
+            MaxPathLength = 3,
+            DistractorDensity = 0f
+        };
+
         public static DifficultySettings QuickPlaySettings() => new DifficultySettings
         {
             BoardWidth = 5,

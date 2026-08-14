@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CircuitShift.Core;
+using CircuitShift.Modules;
 using UnityEngine;
 
 namespace CircuitShift.UnityLayer
@@ -25,6 +26,7 @@ namespace CircuitShift.UnityLayer
         {
             Clear();
             this.board = board;
+            var tint = ThemeVisuals.GetTint(ThemeManager.ActiveThemeId);
 
             for (int x = 0; x < board.Width; x++)
             {
@@ -37,6 +39,7 @@ namespace CircuitShift.UnityLayer
                     var view = Instantiate(tilePrefab, transform);
                     view.transform.localPosition = CellToLocalPosition(pos);
                     view.Bind(pos, data);
+                    view.SetTint(tint);
                     view.Tapped += OnTileTapped;
                     tileViews[pos] = view;
                 }
